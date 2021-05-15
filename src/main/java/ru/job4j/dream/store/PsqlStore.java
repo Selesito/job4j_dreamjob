@@ -196,7 +196,8 @@ public class PsqlStore implements Store {
 
     private void update(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("UPDATE candidate SET name = (?) where id = (?)",
+             PreparedStatement ps = cn.prepareStatement(
+                     "UPDATE candidate SET name = (?) where id = (?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
