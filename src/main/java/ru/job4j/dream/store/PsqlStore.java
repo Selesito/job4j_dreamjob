@@ -1,6 +1,8 @@
 package ru.job4j.dream.store;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
 
@@ -18,6 +20,8 @@ import java.util.Properties;
 public class PsqlStore implements Store {
 
     private final BasicDataSource pool = new BasicDataSource();
+
+    private static final Logger LOG = LoggerFactory.getLogger(PsqlStore.class.getName());
 
     private PsqlStore() {
         Properties cfg = new Properties();
@@ -62,7 +66,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception in log example", e);
         }
         return posts;
     }
@@ -79,7 +83,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception in log example", e);
         }
         return candidates;
     }
@@ -106,7 +110,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception in log example", e);
         }
         return post;
     }
@@ -140,7 +144,7 @@ public class PsqlStore implements Store {
                     );
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LOG.error("Exception in log example", e);
             }
             return post;
         }
@@ -170,7 +174,7 @@ public class PsqlStore implements Store {
                     );
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                LOG.error("Exception in log example", e);
             }
             return candidate;
         }
@@ -189,7 +193,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error("Exception in log example", e);
         }
         return candidate;
     }
