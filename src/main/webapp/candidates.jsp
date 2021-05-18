@@ -1,7 +1,6 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ru.job4j.dream.store.MemStore" %>
+<%@ page import="ru.job4j.dream.store.PsqlStore" %>
 <%@ page import="ru.job4j.dream.model.Candidate" %>
-<%@ page import="java.util.Collection" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!doctype html>
 <html lang="en">
@@ -24,7 +23,6 @@
 </head>
 <body>
 <div class="container pt-3">
-
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
@@ -35,6 +33,7 @@
                     <thead>
                     <tr>
                         <th scope="col">Названия</th>
+                        <th scope="col">Фото</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -45,8 +44,21 @@
                                     <i class="fa fa-edit mr-3"></i>
                                 </a>
                                 <c:out value="${candidate.name}"/>
+
+                            </td>
+                            <td>
+                                <img src="<c:url value='/download?id=${candidate.id}'/>" width="100px" height="100px"/>
+                                <ul class="nav">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="<c:url value='/upload.jsp?id=${candidate.id}.jpg'/>">Добавить</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="<c:url value='/delete?id=${candidate.id}'/>">Удалить</a>
+                                    </li>
+                                </ul>
                             </td>
                         </tr>
+
                     </c:forEach>
                     </tbody>
                 </table>

@@ -211,4 +211,16 @@ public class PsqlStore implements Store {
             throwables.printStackTrace();
         }
     }
+
+    @Override
+    public void delete(int id) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("DELETE from candidate where id=?")
+        ) {
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            LOG.error(e.getMessage(), e);
+        }
+    }
 }

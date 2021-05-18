@@ -18,4 +18,6 @@ public interface Store {
     void save(Candidate candidate);
 
     Candidate findByIdCandidate(int id) throws SQLException;
+
+    void delete(int id);
 }
