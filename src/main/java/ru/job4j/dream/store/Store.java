@@ -2,6 +2,7 @@ package ru.job4j.dream.store;
 
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -20,4 +21,8 @@ public interface Store {
     Candidate findByIdCandidate(int id) throws SQLException;
 
     void delete(int id);
+
+    void addUser(User user);
+
+    User searchEmail(String email);
 }

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -222,5 +223,51 @@ public class PsqlStore implements Store {
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void addUser(User user) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement(
+                     "INSERT INTO users(name, email, password) VALUES (?, ?, ?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    user.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception in log example", e);
+        }
+    }
+
+    @Override
+    public User searchEmail(String email) {
+        User user = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM users WHERE email = (?)")
+        ) {
+            ps.setString(1, "email");
+            try (ResultSet ids = ps.executeQuery()) {
+                if (ids.next()) {
+                    user = new User(
+                            ids.getInt("id"),
+                            ids.getString("name"),
+                            ids.getString("email"),
+                            ids.getString("password")
+                    );
+                }
+            } catch (Exception e) {
+                LOG.error("Exception in log example", e);
+            }
+        } catch (SQLException e) {
+            LOG.error("Exception in log example", e);
+        }
+        return user;
     }
 }
