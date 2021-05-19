@@ -247,12 +247,12 @@ public class PsqlStore implements Store {
     }
 
     @Override
-    public User searchEmail(String email) {
+    public User searchEmail(String em) {
         User user = null;
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement("SELECT * FROM users WHERE email = (?)")
         ) {
-            ps.setString(1, "email");
+            ps.setString(1, em);
             try (ResultSet ids = ps.executeQuery()) {
                 if (ids.next()) {
                     user = new User(
