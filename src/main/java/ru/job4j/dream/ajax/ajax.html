@@ -15,8 +15,8 @@
         $.ajax({
             type: 'GET',
             url: 'http://localhost:8080/job4j_dreamjob_war/greet',
-            data: 'name=' + $('#exampleInputEmail1').val(),
-            dataType: 'text'
+            data: {name : $('#name').val()},
+            dataType: 'json'
         }).done(function(data) {
             $('#idForm').before(data)
         }).fail(function(err){
