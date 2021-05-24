@@ -1,3 +1,6 @@
+<%@ page import="ru.job4j.dream.model.City" %>
+<%@ page import="ru.job4j.dream.model.Candidate" %>
+<%@ page import="ru.job4j.dream.store.PsqlStore" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!doctype html>
@@ -44,11 +47,12 @@
                 Кандидаты
             </div>
             <div class="card-body">
-                <table class="table">
+                <table class="table" id="cityId">
                     <thead>
                     <tr>
                         <th scope="col">Названия</th>
                         <th scope="col">Фото</th>
+                        <th scope="col">Город</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -72,6 +76,9 @@
                                     </li>
                                 </ul>
                             </td>
+                            <td>
+                                <c:out value="${cities[candidate.cityId - 1].name}"/>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -82,3 +89,4 @@
 </div>
 </body>
 </html>
+<%--<c:out value="${cities[candidate.cityId - 1].name}"/>--%>

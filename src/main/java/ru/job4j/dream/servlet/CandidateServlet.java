@@ -26,9 +26,8 @@ public class CandidateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        List<City> cities = (List<City>) PsqlStore.instOf().findAllCities();
         req.setAttribute("candidates", PsqlStore.instOf().findAllCandidates());
-        req.setAttribute("cities", cities);
+        req.setAttribute("cities", PsqlStore.instOf().findAllCities());
         req.setAttribute("user", req.getSession().getAttribute("user"));
         req.getRequestDispatcher("candidates.jsp").forward(req, resp);
     }
