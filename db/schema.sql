@@ -5,7 +5,8 @@ CREATE TABLE post (
 
 CREATE TABLE candidate (
     id SERIAL PRIMARY KEY,
-    name TEXT
+    name TEXT,
+    cityId INTEGER
 );
 
 CREATE TABLE users (
@@ -14,3 +15,14 @@ CREATE TABLE users (
     email VARCHAR (50) UNIQUE,
     password TEXT
 );
+
+CREATE TABLE cities (
+    id SERIAL PRIMARY KEY,
+    name TEXT
+);
+
+INSERT INTO cities(name) VALUES ('Астрахань');
+INSERT INTO cities(name) VALUES ('Краснодар');
+INSERT INTO cities(name) VALUES ('Новосибирск');
+INSERT INTO cities(name) VALUES ('Красноярск');
+INSERT INTO cities(name) VALUES ('Волгоград');

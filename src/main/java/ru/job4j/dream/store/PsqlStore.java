@@ -4,6 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
 
@@ -20,9 +21,8 @@ import java.util.Properties;
 
 public class PsqlStore implements Store {
 
-    private final BasicDataSource pool = new BasicDataSource();
-
     private static final Logger LOG = LoggerFactory.getLogger(PsqlStore.class.getName());
+    private final BasicDataSource pool = new BasicDataSource();
 
     private PsqlStore() {
         Properties cfg = new Properties();
@@ -80,7 +80,9 @@ public class PsqlStore implements Store {
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    candidates.add(new Candidate(it.getInt("id"), it.getString("name")));
+                    candidates.add(new Candidate(it.getInt("id"),
+                            it.getString("name"),
+                            it.getInt("cityId")));
                 }
             }
         } catch (Exception e) {
@@ -171,7 +173,8 @@ public class PsqlStore implements Store {
                 if (ids.next()) {
                     candidate = new Candidate(
                             ids.getInt("id"),
-                            ids.getString("name")
+                            ids.getString("name"),
+                            ids.getInt("cityId")
                     );
                 }
             } catch (Exception e) {
@@ -183,10 +186,12 @@ public class PsqlStore implements Store {
 
     private Candidate create(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("INSERT INTO candidate(name) VALUES (?)",
+             PreparedStatement ps = cn.prepareStatement(
+                     "INSERT INTO candidate(name, cityId) VALUES (?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
+            ps.setInt(2, candidate.getCityId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -202,12 +207,13 @@ public class PsqlStore implements Store {
     private void update(Candidate candidate) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     "UPDATE candidate SET name = (?) where id = (?)",
+                     "UPDATE candidate SET name = (?), cityId = (?) where id = (?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getId());
-            ps.execute();
+            ps.setInt(2, candidate.getCityId());
+            ps.setInt(3, candidate.getId());
+            ps.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -269,5 +275,44 @@ public class PsqlStore implements Store {
             LOG.error("Exception in log example", e);
         }
         return user;
+    }
+
+    @Override
+    public Collection<City> findAllCities() {
+        List<City> cities = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM cities")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    cities.add(new City(it.getInt("id"),
+                            it.getString("name")));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Exception in log example", e);
+        }
+        return cities;
+    }
+
+    @Override
+    public City findByIdCity(int id) throws SQLException {
+        City city = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps = cn.prepareStatement("SELECT * FROM cities WHERE id = (?)")
+        ) {
+            ps.setInt(1, id);
+            try (ResultSet ids = ps.executeQuery()) {
+                if (ids.next()) {
+                    city = new City(
+                            ids.getInt("id"),
+                            ids.getString("name")
+                    );
+                }
+            } catch (Exception e) {
+                LOG.error("Exception in log example", e);
+            }
+            return city;
+        }
     }
 }

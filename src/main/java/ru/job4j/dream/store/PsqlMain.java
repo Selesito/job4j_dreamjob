@@ -15,15 +15,14 @@ public class PsqlMain {
             System.out.println(post.getId() + " " + post.getName());
         }
         System.out.println();
-        store.save(new Candidate(0, "Junior Java"));
-        store.save(new Candidate(0, "Middle Java"));
-        store.save(new Candidate(0, "Senior Java"));
+        store.save(new Candidate(0, "Junior Java", 1));
+        store.save(new Candidate(0, "Middle Java", 2));
+        store.save(new Candidate(0, "Senior Java", 3));
         for (Candidate candidate : store.findAllCandidates()) {
             System.out.println(candidate.getId() + " " + candidate.getName());
         }
         System.out.println();
         store.save(new Post(2, "C Job изменено"));
-        store.save(new Candidate(1, "Junior Java изменено"));
         for (Post post : store.findAllPosts()) {
             System.out.println(post.getId() + " " + post.getName());
         }

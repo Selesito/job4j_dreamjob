@@ -1,5 +1,3 @@
-<%@ page import="ru.job4j.dream.store.PsqlStore" %>
-<%@ page import="ru.job4j.dream.model.Candidate" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!doctype html>
@@ -75,7 +73,6 @@
                                 </ul>
                             </td>
                         </tr>
-
                     </c:forEach>
                     </tbody>
                 </table>
