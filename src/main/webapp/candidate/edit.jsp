@@ -48,14 +48,14 @@
 <body>
 <%
     String id = request.getParameter("id");
-    Candidate candidate = new Candidate(0, "", 0);
+    Candidate candidate = new Candidate(0, "", new City(0,"null"));
     if (id != null) {
         candidate = PsqlStore.instOf().findByIdCandidate(Integer.valueOf(id));
     }
     User user = (User) request.getSession().getAttribute("user");
     City city = new City(0, "Выберите город");
     if (id != null) {
-        city = PsqlStore.instOf().findByIdCity(candidate.getCityId());
+        city = PsqlStore.instOf().findByIdCity(candidate.getCity().getId());
     }
 %>
 <div class="container pt-3">

@@ -6,7 +6,7 @@ CREATE TABLE post (
 CREATE TABLE candidate (
     id SERIAL PRIMARY KEY,
     name TEXT,
-    cityId INTEGER
+    city_Id int references cities(id)
 );
 
 CREATE TABLE users (

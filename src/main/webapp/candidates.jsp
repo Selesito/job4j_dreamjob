@@ -1,6 +1,3 @@
-<%@ page import="ru.job4j.dream.model.City" %>
-<%@ page import="ru.job4j.dream.model.Candidate" %>
-<%@ page import="ru.job4j.dream.store.PsqlStore" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!doctype html>
@@ -77,7 +74,7 @@
                                 </ul>
                             </td>
                             <td>
-                                <c:out value="${cities[candidate.cityId - 1].name}"/>
+                                <c:out value="${candidate.city.name}"/>
                             </td>
                         </tr>
                     </c:forEach>

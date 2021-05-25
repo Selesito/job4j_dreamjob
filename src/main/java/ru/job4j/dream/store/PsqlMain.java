@@ -1,6 +1,7 @@
 package ru.job4j.dream.store;
 
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 
 import java.sql.SQLException;
@@ -15,9 +16,9 @@ public class PsqlMain {
             System.out.println(post.getId() + " " + post.getName());
         }
         System.out.println();
-        store.save(new Candidate(0, "Junior Java", 1));
-        store.save(new Candidate(0, "Middle Java", 2));
-        store.save(new Candidate(0, "Senior Java", 3));
+        store.save(new Candidate(0, "Junior Java", new City(1, "null")));
+        store.save(new Candidate(0, "Middle Java", new City(2, "null")));
+        store.save(new Candidate(0, "Senior Java", new City(3, "null")));
         for (Candidate candidate : store.findAllCandidates()) {
             System.out.println(candidate.getId() + " " + candidate.getName());
         }

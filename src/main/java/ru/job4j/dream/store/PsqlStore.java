@@ -76,13 +76,16 @@ public class PsqlStore implements Store {
     public Collection<Candidate> findAllCandidates() {
         List<Candidate> candidates = new ArrayList<>();
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM candidate")
+             PreparedStatement ps = cn.prepareStatement(
+                     "select c.name as cityName, c.id as cityId, can.id as canId, "
+                             + "can.name as canName from candidate can inner join "
+                             + "cities as c on can.city_Id = c.id;")
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    candidates.add(new Candidate(it.getInt("id"),
-                            it.getString("name"),
-                            it.getInt("cityId")));
+                    candidates.add(new Candidate(it.getInt("canId"),
+                            it.getString("canName"),
+                            new City(it.getInt("cityId"), it.getString("cityName"))));
                 }
             }
         } catch (Exception e) {
@@ -174,7 +177,7 @@ public class PsqlStore implements Store {
                     candidate = new Candidate(
                             ids.getInt("id"),
                             ids.getString("name"),
-                            ids.getInt("cityId")
+                            new City(ids.getInt("city_Id"), "null")
                     );
                 }
             } catch (Exception e) {
@@ -187,11 +190,11 @@ public class PsqlStore implements Store {
     private Candidate create(Candidate candidate) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     "INSERT INTO candidate(name, cityId) VALUES (?, ?)",
+                     "INSERT INTO candidate(name, city_Id) VALUES (?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getCityId());
+            ps.setInt(2, candidate.getCity().getId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -207,11 +210,11 @@ public class PsqlStore implements Store {
     private void update(Candidate candidate) {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
-                     "UPDATE candidate SET name = (?), cityId = (?) where id = (?)",
+                     "UPDATE candidate SET name = (?), city_Id = (?) where id = (?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
-            ps.setInt(2, candidate.getCityId());
+            ps.setInt(2, candidate.getCity().getId());
             ps.setInt(3, candidate.getId());
             ps.executeUpdate();
         } catch (SQLException throwables) {

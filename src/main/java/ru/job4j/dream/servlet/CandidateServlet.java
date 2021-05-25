@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 public class CandidateServlet extends HttpServlet {
     @Override
@@ -19,7 +18,7 @@ public class CandidateServlet extends HttpServlet {
         PsqlStore.instOf().save(
                 new Candidate(Integer.valueOf(req.getParameter("id")),
                         req.getParameter("name"),
-                        Integer.valueOf(req.getParameter("idCity"))));
+                        new City(Integer.valueOf(req.getParameter("idCity")), "null")));
         resp.sendRedirect(req.getContextPath() + "/candidates.do");
     }
 
@@ -27,7 +26,6 @@ public class CandidateServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setAttribute("candidates", PsqlStore.instOf().findAllCandidates());
-        req.setAttribute("cities", PsqlStore.instOf().findAllCities());
         req.setAttribute("user", req.getSession().getAttribute("user"));
         req.getRequestDispatcher("candidates.jsp").forward(req, resp);
     }
